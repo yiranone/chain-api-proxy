@@ -1,31 +1,48 @@
 project_name: chain-api-proxy
+before:
+  hooks:
+    - go mod tidy
 builds:
   - id: chain-api-proxy
     goos:
       - linux
+      - windows
     goarch:
       - amd64
-    main: ./
+      - arm
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+    main: ./cmd/main.go
     flags:
     env:
       - GO111MODULE=on
     ldflags:
+      - -s -w -X main.build={{.Version}}
     binary: chain-api-proxy
 
 archives:
-  - id: chain-api-proxy
+  - name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macos_
+      {{- else }}{{ .Os }}_{{ end }}
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else if eq .Arch "arm64" }}aarch64
+      {{- else if eq .Arch "arm" }}armv{{ .Arm }}
+      {{- else }}{{ .Arch }}{{ end }}
     builds: [ "chain-api-proxy"]
     format: zip
     format_overrides:
       - goos: windows
         format: zip
     wrap_in_directory: /
-    name_template: chain-api-proxy
     files:
-      - src: config/config.yaml
-        dst: .
-        strip_parent: true
-      - src: doc/server.sh
-        dst: .
-        strip_parent: true
+      - README.md
+      - doc/*
+      - config/sample.yaml
 
