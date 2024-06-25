@@ -30,4 +30,4 @@ Your app => chain-api-proxy => Chain API providers => Blockchain
 
 # how to use (如何使用)
 
-chain-api-proxy -config config.yaml
+chain-api-proxy -config config/sample.yaml
