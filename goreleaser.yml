@@ -1,0 +1,31 @@
+project_name: chain-api-proxy
+builds:
+  - id: chain-api-proxy
+    goos:
+      - linux
+    goarch:
+      - amd64
+    main: ./
+    flags:
+    env:
+      - GO111MODULE=on
+    ldflags:
+    binary: chain-api-proxy
+
+archives:
+  - id: chain-api-proxy
+    builds: [ "chain-api-proxy"]
+    format: zip
+    format_overrides:
+      - goos: windows
+        format: zip
+    wrap_in_directory: /
+    name_template: chain-api-proxy
+    files:
+      - src: config/config.yaml
+        dst: .
+        strip_parent: true
+      - src: doc/server.sh
+        dst: .
+        strip_parent: true
+
