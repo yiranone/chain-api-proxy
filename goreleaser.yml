@@ -27,7 +27,6 @@ builds:
 archives:
   - name_template: >-
       {{ .ProjectName }}_
-      {{- .Version }}_
       {{- if eq .Os "darwin" }}macos_
       {{- else }}{{ .Os }}_{{ end }}
       {{- if eq .Arch "amd64" }}x86_64
