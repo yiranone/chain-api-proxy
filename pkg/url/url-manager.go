@@ -129,6 +129,7 @@ func (m *URLManager) StartResetScheduler() {
 						log.Infof("24H重新设置Url=%s为可用状态", status.Url)
 						status.ValidTime = time.Now()
 						status.InvalidTime = time.Time{}
+						status.Reason = "24h set valid"
 					}
 				}
 			}
@@ -303,8 +304,6 @@ func (m *URLManager) resetAllStatusesToValid() {
 		for _, status := range statuses {
 			status.ValidTime = time.Now()
 			status.InvalidTime = time.Time{}
-			status.ResultErrorCount = 0
-			status.SendErrorCount = 0
 		}
 	}
 	m.refreshValidIndexes()
