@@ -15,8 +15,8 @@ import (
 
 func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config, cache *cache2.Cache,
 	requestBlockNumberChain chan bean.GenericJSON,
-	requestContexts map[string]map[string]*bean.RequestContext,
-	requestContextsM sync.Mutex) {
+	requestContexts *map[string]map[string]*bean.RequestContext,
+	requestContextsM *sync.Mutex) {
 	defer r.Body.Close()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -82,19 +82,19 @@ func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config, cache *
 	}
 
 	requestContextsM.Lock()
-	if _, exists := requestContexts[cacheKey]; !exists {
-		requestContexts[cacheKey] = make(map[string]*bean.RequestContext)
+	if _, exists := (*requestContexts)[cacheKey]; !exists {
+		(*requestContexts)[cacheKey] = make(map[string]*bean.RequestContext)
 	}
-	requestContexts[cacheKey][tid] = ctx
+	(*requestContexts)[cacheKey][tid] = ctx
 	requestContextsM.Unlock()
 
 	defer func() {
 		requestContextsM.Lock()
 		defer requestContextsM.Unlock()
-		if ctxs, exists := requestContexts[cacheKey]; exists {
+		if ctxs, exists := (*requestContexts)[cacheKey]; exists {
 			delete(ctxs, tid)
 			if len(ctxs) == 0 {
-				delete(requestContexts, cacheKey)
+				delete(*requestContexts, cacheKey)
 			}
 		}
 	}()

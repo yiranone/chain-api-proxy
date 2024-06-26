@@ -206,8 +206,8 @@ func GoTest(cfg *config.Config, requestBlockNumberChain chan bean.GenericJSON) {
 func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URLManager, httpClient *http.Client,
 	cache *cache2.Cache,
 	requestBlockNumberChain chan bean.GenericJSON,
-	requestContexts map[string]map[string]*bean.RequestContext,
-	requestContextsM sync.Mutex) {
+	requestContexts *map[string]map[string]*bean.RequestContext,
+	requestContextsM *sync.Mutex) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Println("pollBlockByNumberAPI error 异常退出了:", err)
@@ -442,17 +442,17 @@ func sendAgainIfTimesBelow(times int, log *log.Entry, httpUrl string, cacheKey s
 }
 
 func notifyClientDone(log *log.Entry, cacheKey string, responsePayload bean.GenericJSON,
-	requestContexts map[string]map[string]*bean.RequestContext,
-	requestContextsM sync.Mutex) {
+	requestContexts *map[string]map[string]*bean.RequestContext,
+	requestContextsM *sync.Mutex) {
 	requestContextsM.Lock()
 	defer requestContextsM.Unlock()
 
-	if ctxMap, exists := requestContexts[cacheKey]; exists {
+	if ctxMap, exists := (*requestContexts)[cacheKey]; exists {
 		for tid, ctx := range ctxMap {
 			log.Printf("发送应答给客户端channel tid: %s", tid)
 			ctx.Response <- responsePayload
 			close(ctx.Response) // Close the channel to signal that no more responses will be sent
 		}
-		delete(requestContexts, cacheKey) // Remove the entire cacheKey entry after notifying all clients
+		delete(*requestContexts, cacheKey) // Remove the entire cacheKey entry after notifying all clients
 	}
 }

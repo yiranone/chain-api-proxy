@@ -102,14 +102,14 @@ func main() {
 	}
 	log.Infof("启动拉取JOB，数量%d", cfg.PullJobSize)
 	for i := 0; i < cfg.PullJobSize; i++ {
-		go pull.PollBlockByNumberAPI(i, cfg, urlManager, httpClient, cache, requestBlockNumberChain, requestContexts, requestContextsM)
+		go pull.PollBlockByNumberAPI(i, cfg, urlManager, httpClient, cache, requestBlockNumberChain, &requestContexts, &requestContextsM)
 	}
 	go pull.FixSchedulerFetchLatestBlock(cfg, requestBlockNumberChain)
 	go pull.CalcLatestBlockNumber(cfg, urlManager, cache, requestBlockNumberChain)
 	go pull.GoTest(cfg, requestBlockNumberChain)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http2.Handler(w, r, cfg, cache, requestBlockNumberChain, requestContexts, requestContextsM)
+		http2.Handler(w, r, cfg, cache, requestBlockNumberChain, &requestContexts, &requestContextsM)
 	})
 	http.HandleFunc("/urlStats", func(w http.ResponseWriter, r *http.Request) {
 		http2.HandlerUrlManagerStatusRequest(w, r, urlManager)
