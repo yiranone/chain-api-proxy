@@ -304,6 +304,7 @@ func (m *URLManager) resetAllStatusesToValid() {
 		for _, status := range statuses {
 			status.ValidTime = time.Now()
 			status.InvalidTime = time.Time{}
+			status.Reason = "reset all to valid"
 		}
 	}
 	m.refreshValidIndexes()
