@@ -100,6 +100,7 @@ func main() {
 		Timeout:   time.Duration(cfg.BackendHttpSeconds) * time.Second, // 设置全局超时时间
 		Transport: transport,
 	}
+
 	log.Infof("启动拉取JOB，数量%d", cfg.PullJobSize)
 	for i := 0; i < cfg.PullJobSize; i++ {
 		go pull.PollBlockByNumberAPI(i, cfg, urlManager, httpClient, cache, requestBlockNumberChain, &requestContexts, &requestContextsM)
