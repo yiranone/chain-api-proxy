@@ -28,7 +28,7 @@ check_kill(){
 
 linux_start(){
     echo "Starting... $prog ";
-    echo "配置文件路径$DEPLOY_HOME/config"
+    echo "配置文件$DEPLOY_HOME/config.yaml"
     setsid $DEPLOY_BIN --config=$DEPLOY_HOME/config.yaml 1>>$DEPLOY_HOME/logs/boot.log 2>&1 &
     echo "success started $prog ";
 }
