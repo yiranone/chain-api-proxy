@@ -365,6 +365,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 		if strings.Contains(responseBodyString, "Out of requests") ||
 			strings.Contains(responseBodyString, "daily quota exceeded") ||
 			strings.Contains(responseBodyString, "monthly limit") ||
+			strings.Contains(responseBodyString, "limit exceeded") ||
 			strings.Contains(responseBodyString, "upgrade your plan") {
 			log.Printf("没有资源了,再请求一次 %s,%s", httpUrl, responseBodyString)
 			urlManager.SetInvalid(httpUrl, responseBodyString)
