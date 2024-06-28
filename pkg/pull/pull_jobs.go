@@ -366,6 +366,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 		}
 		if strings.Contains(responseBodyString, "Out of requests") ||
 			strings.Contains(responseBodyString, "daily quota exceeded") ||
+			strings.Contains(responseBodyString, "rate limit") ||
 			strings.Contains(responseBodyString, "monthly limit") ||
 			strings.Contains(responseBodyString, "Please contact") ||
 			strings.Contains(responseBodyString, "limit exceeded") ||
