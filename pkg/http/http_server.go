@@ -9,6 +9,7 @@ import (
 	util2 "github.com/yiranone/chain-api-proxy/pkg/util"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -50,7 +51,7 @@ func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config, cache *
 		return
 	}
 	cacheKey := cache2.CreateCacheKey(req)
-	log = log.WithField("clientReqId", id)
+	log = log.WithField("clientReqId", strconv.FormatInt(id, 10))
 	log = log.WithField("cacheKey", util2.TruncateString(cacheKey, 128))
 	log = log.WithField("blockNumberChainSize", len(requestBlockNumberChain))
 

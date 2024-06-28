@@ -256,11 +256,13 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 		}
 		reqId, ok := reqMap["id"]
 		if ok {
-			log = log.WithField("reqId", reqId)
+			v, _ := util.ConvertToString(reqId)
+			log = log.WithField("reqId", v)
 		}
 		clientReqId, ok := reqMap["clientReqId"]
 		if ok {
-			log = log.WithField("clientReqId", clientReqId)
+			v, _ := util.ConvertToString(clientReqId)
+			log = log.WithField("clientReqId", v)
 		}
 		sendTime, ok := reqMap["sendTime"].(time.Time)
 		if ok {
