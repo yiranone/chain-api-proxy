@@ -367,6 +367,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 
 		//go.getblock.io 还没获取到，重新测试
 		if strings.Contains(responseBodyString, "invalid block for tracing") {
+			log.Printf("invalid block for tracing 命中，重新发一次 %s,%s", httpUrl, responseBodyString)
 			sendAgainIfTimesBelow(times, log, httpUrl, cacheKey, payloadBytes, responseBodyString, reqMap, cache, requestBlockNumberChain)
 			continue
 		}
