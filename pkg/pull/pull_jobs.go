@@ -460,8 +460,9 @@ func notifyClientDone(log *log.Entry, cacheKey string, responsePayload bean.Gene
 	defer requestContextsM.Unlock()
 
 	if ctxMap, exists := requestContexts[cacheKey]; exists {
-		for tid, ctx := range ctxMap {
-			log.Printf("发送应答给客户端channel tid: %s", tid)
+		log.Printf("发送应答给客户端channel 数量: %d", len(ctxMap))
+		for _, ctx := range ctxMap {
+			// log.Printf("发送应答给客户端channel tid: %s", tid)
 			ctx.Response <- responsePayload
 			close(ctx.Response) // Close the channel to signal that no more responses will be sent
 		}
