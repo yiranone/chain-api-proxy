@@ -364,6 +364,12 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 			sendAgainIfTimesBelow(times, log, httpUrl, cacheKey, payloadBytes, responseBodyString, reqMap, cache, requestBlockNumberChain)
 			continue
 		}
+
+		//go.getblock.io 还没获取到，重新测试
+		if strings.Contains(responseBodyString, "invalid block for tracing") {
+			sendAgainIfTimesBelow(times, log, httpUrl, cacheKey, payloadBytes, responseBodyString, reqMap, cache, requestBlockNumberChain)
+			continue
+		}
 		if strings.Contains(responseBodyString, "Out of requests") ||
 			strings.Contains(responseBodyString, "daily quota exceeded") ||
 			strings.Contains(responseBodyString, "rate limit") ||
