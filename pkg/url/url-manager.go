@@ -31,6 +31,7 @@ type Status struct {
 	InvalidTime      time.Time
 	ValidTime        time.Time
 	Reason           string
+	LastErrorDesc    string
 }
 
 // formatTime方法用于格式化时间，如果时间为空则返回"none"
@@ -43,7 +44,7 @@ func (s Status) formatTime(t time.Time) string {
 
 // String方法用于返回Status结构体的可读字符串表示
 func (s Status) String() string {
-	return fmt.Sprintf("Url:%s UrlType:%s Valid:%t  AccessTime:%s  InvalidTime:%s ValidTime:%s AccessCount:%d ResultErrorCount:%d ResultNullCount:%d  SendErrorCount:%d ReadErrorCount:%d TimeoutCount:%d  BlockNotFound:%d Reason:%s",
+	return fmt.Sprintf("Url:%s UrlType:%s Valid:%t  AccessTime:%s  InvalidTime:%s ValidTime:%s AccessCount:%d ResultErrorCount:%d ResultNullCount:%d  SendErrorCount:%d ReadErrorCount:%d TimeoutCount:%d  BlockNotFound:%d Reason:%s LastErrorDesc:%s",
 		s.Url,
 		s.UrlType,
 		s.InvalidTime.IsZero(),
@@ -57,7 +58,8 @@ func (s Status) String() string {
 		s.ReadErrorCount,
 		s.TimeoutCount,
 		s.BlockNotFound,
-		s.Reason)
+		s.Reason,
+		s.LastErrorDesc)
 }
 
 type URLManager struct {
@@ -135,6 +137,19 @@ func (m *URLManager) StartResetScheduler() {
 			}
 			m.refreshValidIndexes()
 			m.mutex.Unlock()
+		}
+	}
+}
+
+func (m *URLManager) SetLastErrorDesc(url string, errorDesc string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+
+	for _, statuses := range m.urlGroups {
+		for _, status := range statuses {
+			if status.Url == url {
+				status.LastErrorDesc = errorDesc
+			}
 		}
 	}
 }
