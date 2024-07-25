@@ -333,6 +333,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 				urlManager.AddTimeoutCount(httpUrl)
 			} else {
 				urlManager.AddSendErrorCount(httpUrl)
+				urlManager.SetLastErrorDesc(httpUrl, err.Error())
 			}
 			//其他错误
 			httpTimeCost := time.Since(startTimeHttp).Seconds()
@@ -348,6 +349,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 			log.Printf("Failed to read response %fs times=%d url=%s,request=%s err=%v", httpTimeCost, times, httpUrl, string(payloadBytes), err)
 			resp.Body.Close()
 			urlManager.AddReadErrorCount(httpUrl)
+			urlManager.SetLastErrorDesc(httpUrl, err.Error())
 			sendAgainIfTimesBelow(times, log, httpUrl, cacheKey, payloadBytes, "", reqMap, cache, requestBlockNumberChain)
 			continue
 		}
