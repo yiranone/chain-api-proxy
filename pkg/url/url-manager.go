@@ -31,6 +31,7 @@ type Status struct {
 	InvalidTime      time.Time
 	ValidTime        time.Time
 	Reason           string
+	LastErrorTime    time.Time
 	LastErrorDesc    string
 }
 
@@ -44,7 +45,9 @@ func (s Status) formatTime(t time.Time) string {
 
 // String方法用于返回Status结构体的可读字符串表示
 func (s Status) String() string {
-	return fmt.Sprintf("Url:%s UrlType:%s Valid:%t  AccessTime:%s  InvalidTime:%s ValidTime:%s AccessCount:%d ResultErrorCount:%d ResultNullCount:%d  SendErrorCount:%d ReadErrorCount:%d TimeoutCount:%d  BlockNotFound:%d Reason:%s LastErrorDesc:%s",
+	return fmt.Sprintf("Url:%s UrlType:%s Valid:%t  AccessTime:%s  InvalidTime:%s ValidTime:%s AccessCount:%d ResultErrorCount:%d "+
+		"ResultNullCount:%d  SendErrorCount:%d ReadErrorCount:%d TimeoutCount:%d  BlockNotFound:%d Reason:%s "+
+		"LastErrorTime:%s  LastErrorDesc:%s",
 		s.Url,
 		s.UrlType,
 		s.InvalidTime.IsZero(),
@@ -59,6 +62,7 @@ func (s Status) String() string {
 		s.TimeoutCount,
 		s.BlockNotFound,
 		s.Reason,
+		s.LastErrorTime,
 		s.LastErrorDesc)
 }
 
@@ -148,6 +152,7 @@ func (m *URLManager) SetLastErrorDesc(url string, errorDesc string) {
 	for _, statuses := range m.urlGroups {
 		for _, status := range statuses {
 			if status.Url == url {
+				status.LastErrorTime = time.Now()
 				status.LastErrorDesc = errorDesc
 			}
 		}
