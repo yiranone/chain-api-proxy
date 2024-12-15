@@ -123,8 +123,15 @@ func (m *URLManager) SetAllValid() {
 	m.resetAllStatusesToValid()
 }
 
-func (m *URLManager) StartResetScheduler() {
-	ticker := time.NewTicker(24 * time.Hour)
+func (m *URLManager) StartResetScheduler(hour int) {
+	if hour == -1 {
+		return
+	}
+	if hour <= 0 || hour > 24*365 {
+		hour = 1
+	}
+	log.Infof("设置重置url时间:%d", hour)
+	ticker := time.NewTicker(time.Duration(hour) * time.Hour)
 	for {
 		select {
 		case <-ticker.C:
@@ -135,7 +142,7 @@ func (m *URLManager) StartResetScheduler() {
 						log.Infof("24H重新设置Url=%s为可用状态", status.Url)
 						status.ValidTime = time.Now()
 						status.InvalidTime = time.Time{}
-						status.Reason = "24h set valid"
+						status.Reason = "Fix time reset hour:" + strconv.Itoa(hour)
 					}
 				}
 			}

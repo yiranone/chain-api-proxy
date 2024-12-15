@@ -21,15 +21,16 @@ type Config struct {
 	SpecialMethods   []string `yaml:"specialMethods"`
 	SpecialMethodMap map[string]struct{}
 
-	LogPath            string `yaml:"logPath"`
-	LoopSeconds        int    `yaml:"loopSeconds"`
-	CacheSeconds       int    `yaml:"cacheSeconds"`
-	BackendHttpSeconds int    `yaml:"backendHttpSeconds"`
-	FrontHttpSeconds   int    `yaml:"frontHttpSeconds"`
-	ChannelSize        int    `yaml:"channelSize"`
-	PullJobSize        int    `yaml:"pullJobSize"`
-	Chain              int    `yaml:"chain"`
-	Port               int    `yaml:"port"`
+	LogPath                 string `yaml:"logPath"`
+	LoopSeconds             int    `yaml:"loopSeconds"`
+	CacheSeconds            int    `yaml:"cacheSeconds"`
+	BackendHttpSeconds      int    `yaml:"backendHttpSeconds"`
+	FrontHttpSeconds        int    `yaml:"frontHttpSeconds"`
+	ChannelSize             int    `yaml:"channelSize"`
+	PullJobSize             int    `yaml:"pullJobSize"`
+	Chain                   int    `yaml:"chain"`
+	Port                    int    `yaml:"port"`
+	ResetUrlToValidInterval int    `yaml:"resetUrlToValidInterval"`
 }
 
 // LoadConfig 从指定路径加载配置文件

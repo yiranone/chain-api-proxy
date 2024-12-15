@@ -81,7 +81,7 @@ func main() {
 
 	urlManager := url2.NewURLManager(cfg.ClientRequestUrl, cfg.ClientRequestSpecialUrl, cfg.JobRequestUrl, cfg.JobRequestSpecialUrl)
 	urlManager.SetAllValid()
-	go urlManager.StartResetScheduler()
+	go urlManager.StartResetScheduler(cfg.ResetUrlToValidInterval)
 
 	go cache.CleanupExpiredItems(cfg.CacheSeconds)
 
