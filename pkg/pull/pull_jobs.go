@@ -391,7 +391,7 @@ func PollBlockByNumberAPI(index int, config *config.Config, urlManager *url2.URL
 		var responsePayload bean.GenericJSON
 		if err := json.Unmarshal(responseBodyBytes, &responsePayload); err != nil {
 			duration := time.Since(startTime).Seconds()
-			log.Printf("解析json异常 duration=%fs url=%s resp:%v,%v", duration, httpUrl, responseBodyString, err)
+			log.Printf("解析json异常g duration=%fs url=%s resp:%v,%v", duration, httpUrl, responseBodyString, err)
 			sendAgainIfTimesBelow(times, log, httpUrl, cacheKey, payloadBytes, responseBodyString, reqMap, cache, requestBlockNumberChain)
 			continue
 		}
